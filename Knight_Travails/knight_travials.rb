@@ -41,7 +41,6 @@ class KnightPathFinder
                 node = PolyTreeNode.new(move)
                 queue[0].add_child(node)
                 pos_looked << node.value
-                node.parent = queue[0]
                 queue << node
             end
             queue.shift()
@@ -49,9 +48,30 @@ class KnightPathFinder
         pos_looked
     end
 
+    def find_path(end_position)
+        final_node=@start_node.dfs(end_position) 
+        trace_back_path(final_node)
+    end
+
+    def trace_back_path(node)
+        arr=[]
+        while node.parent != nil
+            arr << node.value
+            node = node.parent
+        end
+        arr << node.value
+        arr.reverse
+    end
+
 end
 
-k = KnightPathFinder.new([0,0])
+# k = KnightPathFinder.new([2,2])
 
-p k.build_move_tree.length
-p k.start_node
+# p k.build_move_tree.length
+# p k.start_node
+# p k.start_node.children[0]
+kpf = KnightPathFinder.new([0, 0])
+kpf.build_move_tree
+p kpf.find_path([7, 6]) # => [[0, 0], [1, 2], [2, 4], [3, 6], [5, 5], [7, 6]]
+p kpf.find_path([6, 2]) # => [[0, 0], [1, 2], [2, 0], [4, 1], [6, 2]]
+
